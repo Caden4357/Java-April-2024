@@ -1,4 +1,4 @@
-package week1.day2.Lecture;
+
 import java.util.Date;
 
 public class Greetings {

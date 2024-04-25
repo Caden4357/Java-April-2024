@@ -1,4 +1,3 @@
-package week1.day2.Lecture;
 
 public class FundamentalsContinued {
     public static void main(String[] args){

@@ -1,4 +1,4 @@
-package week1.day2.Lecture;
+
 import java.util.ArrayList;
 public class TestGreetings {
     public static void main(String[] args) {
