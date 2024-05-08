@@ -1,0 +1,13 @@
+package com.codingdojo.musicZone;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MusicZoneApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(MusicZoneApplication.class, args);
+	}
+
+}
