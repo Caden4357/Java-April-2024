@@ -25,7 +25,7 @@ public class Artist {
 	private Long id;
 	
 	@NotNull
-	@Size(min = 2, max = 45)
+	@Size(min = 2, max = 45, message = "Title doesnt meet our validations")
 	private String name;
 	
 	@NotNull

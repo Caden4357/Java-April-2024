@@ -7,10 +7,21 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+<!-- <link rel="stylesheet" href="/css/style.css"/> -->
+
+<style>
+	.container-height {
+	height: 100vh;
+	background: "red";
+}
+</style>
 </head>
 <body>
-	<div class="container">
+	<div class="container container-height">
 		<h1 class="text-center">Ninja Gold!</h1>
+		<form action="/reset" method="POST">
+			<button class="btn btn-primary">Reset</button>
+		</form>
 		<h2>
 			Your Gold:
 			<c:out value="${gold}" />
@@ -49,6 +60,13 @@
 					<button>Find Gold!</button>
 				</form>
 			</div>
+		</div>
+		<div class="d-flex flex-column-reverse border border-2 border-dark mt-4 overflow-scroll h-25">
+			<c:forEach var="activity" items="${activities}">
+				<p class="${activity.styleClass}">
+					<c:out value="${activity.note}"></c:out>
+				</p>
+			</c:forEach>
 		</div>
 	</div>
 </body>

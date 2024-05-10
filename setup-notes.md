@@ -45,11 +45,17 @@ spring.datasource.url=jdbc:mysql://localhost:3306/<<YOUR_SCHEMA>>?createDatabase
 spring.datasource.username=<<dbuser>>
 spring.datasource.password=<<dbpassword>>
 spring.jpa.hibernate.ddl-auto=update
+spring.mvc.hiddenmethod.filter.enabled=true
 ```
 
 # jstl tag for c tags:
 ```
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page isErrorPage="true" %>  
+<!-- For JSTL Forms -->
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isErrorPage="true"%>
 ```
 
 
