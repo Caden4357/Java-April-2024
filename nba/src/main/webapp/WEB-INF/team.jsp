@@ -15,7 +15,10 @@
 </head>
 <body>
 	<div class="container">
-		<h1><c:out value="${team.name}" /></h1>
+		<a href="/">Home</a>
+		<h1>
+			<c:out value="${team.name}" />
+		</h1>
 		<table class="table table-dark table-striped">
 			<thead>
 				<tr>
@@ -27,7 +30,11 @@
 				<c:forEach var="player" items="${team.players}">
 					<tr>
 						<td><c:out value="${player.name}" /></td>
-						<%-- <td><a class="btn btn-success" href="/team/${team.id}">View</a></td> --%>
+						<td><a class="btn btn-success" href="/player/${player.id}">View</a>
+							<form action="/player/delete/${player.id}" method="post">
+								<input type="hidden" name="_method" value="delete"> <input
+									class="btn btn-danger" type="submit" value="Delete">
+							</form></td>
 					</tr>
 				</c:forEach>
 			</tbody>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -46,9 +47,11 @@ public class Team {
         this.updatedAt = new Date();
     }
     
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Player> players;
     
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Coach> coaches;
     
 	public Team() {
 	}
@@ -84,6 +87,12 @@ public class Team {
 	}
 	public void setPlayers(List<Player> players) {
 		this.players = players;
+	}
+	public List<Coach> getCoaches() {
+		return coaches;
+	}
+	public void setCoaches(List<Coach> coaches) {
+		this.coaches = coaches;
 	}
     
     

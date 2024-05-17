@@ -39,6 +39,21 @@
 			</p>
 			<input type="submit" value="Submit" />
 		</form:form>
+		
+		<h2>Login</h2>
+		<form:form action="/login" method="post" modelAttribute="newLogin">
+			<p>
+				<form:label path="email">email</form:label>
+				<form:errors class="text-danger" path="email" />
+				<form:input class="w-100" path="email" />
+			</p>
+			<p>
+				<form:label path="password">Password</form:label>
+				<form:errors class="text-danger" path="password" />
+				<form:input class="w-100" type="password" path="password" />
+			</p>
+			<input type="submit" value="Submit" />
+		</form:form>
 	</div>
 </body>
 </html>

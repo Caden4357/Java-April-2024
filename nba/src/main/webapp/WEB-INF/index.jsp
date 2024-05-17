@@ -15,7 +15,9 @@
 </head>
 <body>
 	<div class="container">
-	<a href="/addPlayer">Add A Player</a>
+		<h1 class="text-center">NBA Roster</h1>
+		<a href="/addPlayer">Add A Player</a>
+		<a href="/addCoach">Add A Coach</a>
 		<table class="table table-dark table-striped">
 			<thead>
 				<tr>
@@ -27,7 +29,13 @@
 				<c:forEach var="team" items="${teams}">
 					<tr>
 						<td><c:out value="${team.name}" /></td>
-						<td><a class="btn btn-success" href="/team/${team.id}">View</a></td>
+						<td>
+							<a class="btn btn-success" href="/team/${team.id}">View</a>
+							<form action="/team/delete/${team.id}" method="post">
+								<input type="hidden" name="_method" value="delete"> 
+								<input class="btn btn-danger" type="submit" value="Delete">
+							</form>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>

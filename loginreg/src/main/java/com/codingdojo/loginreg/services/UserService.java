@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.codingdojo.loginreg.models.LoginUser;
 import com.codingdojo.loginreg.models.User;
 import com.codingdojo.loginreg.repositories.UserRepository;
 
@@ -39,5 +40,33 @@ public class UserService {
 		String hashedPass = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
 		newUser.setPassword(hashedPass);
 		return uRepo.save(newUser);
+	}
+	public User login(LoginUser newLoginUser, BindingResult result) {
+//		check if the user exists by their email 
+		Optional<User> potentialUser = uRepo.findByEmail(newLoginUser.getEmail());
+		if(!potentialUser.isPresent()) {
+			result.rejectValue("email", "matches", "Invalid Email/Password");
+			return null;
+		}
+//		
+		User user = potentialUser.get();
+		if(!BCrypt.checkpw(newLoginUser.getPassword(),user.getPassword())) {
+			result.rejectValue("password", "matches", "Invalid Email/Password");
+			return null;
+		}
+		if (result.hasErrors()) {
+			return null;
+		}
+		return user;
+//		if they do check their password agains the password in the DB using bcrypt
+//		if either of these 2 things fail reject (throw an error)
+	}
+	public User getUserById(Long id) {
+		Optional<User> user = uRepo.findById(id);
+        if(user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
 	}
 }

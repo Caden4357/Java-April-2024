@@ -31,4 +31,9 @@ public class TeamService {
             return null;
         }
 	}
+	
+//	Delete Team
+	public void deleteTeam(Long id) {
+		tRepo.deleteById(id);
+	}
 }

@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.codingdojo.nba.models.Coach;
 import com.codingdojo.nba.models.Player;
 import com.codingdojo.nba.models.Team;
 import com.codingdojo.nba.services.PlayerService;
@@ -57,13 +59,30 @@ public class HomeController {
 		}
 	}
 	
+	@GetMapping("/player/{id}")
+	public String viewOnePlayer(@PathVariable("id") Long id, Model model) {
+		Player onePlayer = players.findPlayer(id);
+		model.addAttribute("player", onePlayer);
+		return "player.jsp";
+	}
+	
 	@GetMapping("/team/{id}")
 	public String viewOneTeam(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("team", teams.getTeamById(id));
 		return "team.jsp";
 	}
 	
+	@DeleteMapping("/team/delete/{id}")
+	public String deleteTeam(@PathVariable("id") Long id) {
+		teams.deleteTeam(id);
+		return "redirect:/";
+	}
 	
+	@GetMapping("/addCoach")
+	public String coachForm(@ModelAttribute("coach") Coach coach, Model model) {
+		model.addAttribute("teams", teams.findAllTeams());
+		return "coachForm.jsp";
+	}
 	
 	
 }
