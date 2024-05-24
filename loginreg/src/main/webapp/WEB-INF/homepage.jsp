@@ -17,7 +17,7 @@
 	<div class="container border border-2 border-primary">
 		<a href="/logout">Logout</a>
 		<h1>Homepage!</h1>
-		<h2>Welcome Back <c:out value="${user.username}"/></h2>
+		<h2 class="text-success">Welcome Back <span class="text-primary"><c:out value="${user.username}"/></span></h2>
 	</div>
 </body>
 </html>
