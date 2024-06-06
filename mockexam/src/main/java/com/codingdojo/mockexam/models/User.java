@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,114 +23,136 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
-public class User{
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+// 	Add additional attributes dont forget constructors and getters and setters also as well as any relationships you might need
 	@NotEmpty(message = "username is required!")
 	@Size(min = 3, max = 30, message = "username must be between 3 and 30 characters")
 	private String username;
-	
+
 	@NotEmpty(message = "Email is required!")
 	@Email(message = "Please enter a valid email!")
 	private String email;
-	
+
 	@NotEmpty(message = "Password is required!")
 	@Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
 	private String password;
-	
+
 	@Transient
 	@NotEmpty(message = "Confirm Password is required!")
 	@Size(min = 8, max = 128, message = "Confirm Password must be between 8 and 128 characters")
 	private String confirm;
-	
-	@Column(updatable=false)
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+
+	@Column(updatable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updatedAt;
-	
+
 	@PrePersist
-	protected void onCreate(){
+	protected void onCreate() {
 		this.createdAt = new Date();
 	}
+
 	@PreUpdate
-	protected void onUpdate(){
+	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
+//  One TO many relationship
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Band> bands;
 	
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Artist> artists;
-    
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Comment> comments;
-    
-    
+//  One TO many relationship
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Comment> comments;
 	public User() {
 	}
-	public User(String username, String email, String password, String confirm) {
+
+	public User(
+			@NotEmpty(message = "username is required!") @Size(min = 3, max = 30, message = "username must be between 3 and 30 characters") String username,
+			@NotEmpty(message = "Email is required!") @Email(message = "Please enter a valid email!") String email,
+			@NotEmpty(message = "Password is required!") @Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters") String password,
+			@NotEmpty(message = "Confirm Password is required!") @Size(min = 8, max = 128, message = "Confirm Password must be between 8 and 128 characters") String confirm) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.confirm = confirm;
 	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public String getConfirm() {
 		return confirm;
 	}
+
 	public void setConfirm(String confirm) {
 		this.confirm = confirm;
 	}
+
 	public Date getCreatedAt() {
 		return createdAt;
 	}
+
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
+
 	public Date getUpdatedAt() {
 		return updatedAt;
 	}
+
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	public List<Artist> getArtists() {
-		return artists;
+
+	public String getUsername() {
+		return username;
 	}
-	public void setArtists(List<Artist> artists) {
-		this.artists = artists;
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
+
+	public List<Band> getArtists() {
+		return bands;
+	}
+
+	public void setArtists(List<Band> bands) {
+		this.bands = bands;
+	}
+
 	public List<Comment> getComments() {
 		return comments;
 	}
+
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
-	
-	
 	
 	
 }

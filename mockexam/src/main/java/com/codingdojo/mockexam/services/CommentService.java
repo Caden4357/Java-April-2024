@@ -11,20 +11,23 @@ import com.codingdojo.mockexam.repositories.CommentRepository;
 
 @Service
 public class CommentService {
+
 	@Autowired
 	CommentRepository cRepo;
 
-	public List<Comment> allComments() {
+	//	get all
+	public List<Comment> allComment() {
 		return cRepo.findAll();
 	}
 
-	public Comment newComment(Comment comment) {
+	//	create new 
+	public Comment createComment(Comment comment) {
+		System.out.println(comment.getId());
 		return cRepo.save(comment);
-
 	}
 
-	// retrieves an artist
-	public Comment findComment(Long id) {
+	//	Get one 
+	public Comment oneComment(Long id) {
 		Optional<Comment> comment = cRepo.findById(id);
 		if (comment.isPresent()) {
 			return comment.get();
@@ -33,11 +36,14 @@ public class CommentService {
 		}
 	}
 
+	// delete one
 	public void deleteComment(Long id) {
 		cRepo.deleteById(id);
 	}
 
+	// update one
 	public Comment updateComment(Comment comment) {
 		return cRepo.save(comment);
 	}
+
 }

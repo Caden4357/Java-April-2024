@@ -11,62 +11,57 @@ import com.codingdojo.mockexam.models.LoginUser;
 import com.codingdojo.mockexam.models.User;
 import com.codingdojo.mockexam.repositories.UserRepository;
 
+
 @Service
 public class UserService {
-	
+
 	@Autowired
 	UserRepository uRepo;
-	
+
 	public User register(User newUser, BindingResult result) {
-		
-//		see if the email already exists in the DB
+
+//		find the user by email
 		Optional<User> potentialUser = uRepo.findByEmail(newUser.getEmail());
-			// if it does throw an error 
-		if(potentialUser.isPresent()) {
+		if (potentialUser.isPresent()) {
 			result.rejectValue("email", "matches", "An account already exists please sign in.");
 		}
-//		if the password matches the confirm password 
-		// if it doesnt throw an error 
-		if(!newUser.getPassword().equals(newUser.getConfirm())) {
-			result.rejectValue("confirm", "matches", "Confirm password and password must match");
-		}
-		
-		if(result.hasErrors()) {
-			return null;
-		}
-		
-// 		if we get this far we need to hash and salt the password and save the user in the DB
-		
-		String hashedPass = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
-		newUser.setPassword(hashedPass);
-		return uRepo.save(newUser);
-	}
-	public User login(LoginUser newLoginUser, BindingResult result) {
-//		check if the user exists by their email 
-		Optional<User> potentialUser = uRepo.findByEmail(newLoginUser.getEmail());
-		if(!potentialUser.isPresent()) {
-			result.rejectValue("email", "matches", "Invalid Email/Password");
-			return null;
-		}
-//		
-		User user = potentialUser.get();
-		if(!BCrypt.checkpw(newLoginUser.getPassword(),user.getPassword())) {
-			result.rejectValue("password", "matches", "Invalid Email/Password");
-			return null;
+// 		if password and confirm dont match
+		if (!newUser.getPassword().equals(newUser.getConfirm())) {
+			result.rejectValue("confirm", "Matches", "The Confirm Password must match Password!");
 		}
 		if (result.hasErrors()) {
 			return null;
 		}
+		String hashed = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
+		newUser.setPassword(hashed);
+		return uRepo.save(newUser);
+	}
+
+	public User login(LoginUser newLoginUser, BindingResult result) {
+		Optional<User> potentialUser = uRepo.findByEmail(newLoginUser.getEmail());
+
+		if (!potentialUser.isPresent()) {
+			result.rejectValue("email", "Matches", "User not found!");
+			return null;
+		}
+
+		User user = potentialUser.get();
+
+		if (!BCrypt.checkpw(newLoginUser.getPassword(), user.getPassword())) {
+			result.rejectValue("password", "Matches", "Invalid Password!");
+		}
+
+		if (result.hasErrors()) {
+			return null;
+		}
+
 		return user;
-//		if they do check their password agains the password in the DB using bcrypt
-//		if either of these 2 things fail reject (throw an error)
 	}
-	public User getUserById(Long id) {
-		Optional<User> user = uRepo.findById(id);
-        if(user.isPresent()) {
-            return user.get();
-        } else {
-            return null;
-        }
-	}
+	  public User findById(Long id) {
+	    	Optional<User> potentialUser = uRepo.findById(id);
+	    	if(potentialUser.isPresent()) {
+	    		return potentialUser.get();
+	    	}
+	    	return null;
+	    }
 }

@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.codingdojo.mockexam.models.Artist;
+import com.codingdojo.mockexam.models.Band;
 import com.codingdojo.mockexam.models.Comment;
+import com.codingdojo.mockexam.models.Musician;
 import com.codingdojo.mockexam.models.User;
-import com.codingdojo.mockexam.services.ArtistService;
+import com.codingdojo.mockexam.services.BandService;
 import com.codingdojo.mockexam.services.CommentService;
+import com.codingdojo.mockexam.services.MusicianService;
 import com.codingdojo.mockexam.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -24,90 +27,86 @@ import jakarta.validation.Valid;
 @Controller
 public class HomeController {
 	@Autowired
-	ArtistService artists;
-	@Autowired
 	UserService users;
 	@Autowired
-	HttpSession session;
+	BandService bands;
 	@Autowired
 	CommentService comments;
+	@Autowired
+	MusicianService musicians;
 	
-	@GetMapping("/artist/form")
-	public String artistForm(@ModelAttribute("artist") Artist artist) {
-		Long userId = (Long) session.getAttribute("userId");
-		if(userId == null) {
-			return "redirect:/";
-		}
-		return "artistForm.jsp";
+	@GetMapping("/band/form")
+	public String bandForm(@ModelAttribute("band") Band band) {
+		return "bandForm.jsp";
 	}
-	@PostMapping("/create/artist")
-	public String createArtist(@Valid @ModelAttribute("artist") Artist artist, BindingResult result) {
-		Long userId = (Long) session.getAttribute("userId");
-		if(userId == null) {
-			return "redirect:/";
-		}
+	@PostMapping("/create/band")
+	public String createBand(@Valid @ModelAttribute("band") Band band, BindingResult result) {
+		System.out.println(band.getUser());
 		if(result.hasErrors()) {
-			return "artistForm.jsp";
+			return "bandForm.jsp";
 		}
 		else {
-			User user = users.getUserById(userId);
-			artist.setUser(user);
-			artists.newArtist(artist);
+			bands.createBand(band);
+			return "redirect:/welcome";
+			
 		}
-		return "redirect:/homepage";
+	}
+	@GetMapping("/view/band/{id}")
+	public String viewBand(@PathVariable("id") Long id, Model model, @ModelAttribute("comment") Comment comment) {
+		model.addAttribute("band", bands.oneBand(id));
+		model.addAttribute("musicians", musicians.allMusicians());
+		return "oneBand.jsp";
 	}
 	
-	
-	@GetMapping("/view/artist/{id}")
-	public String viewArtist(@PathVariable("id") Long id, Model model, @ModelAttribute("comment") Comment comment) {
-		model.addAttribute("artist", artists.findArtist(id));
-		return "viewArtist.jsp";
+	@PostMapping("/add/musician/to/band/{bandId}")
+	public String addMusicianToBand(@PathVariable("bandId") Long bandId, @RequestParam("musicianId") Long musicianId) {
+		Band band = bands.oneBand(bandId);
+		Musician musician = musicians.findMusician(musicianId);
+		bands.addMusicianToBand(musician, band);
+		return "redirect:/view/band/" + bandId;
 	}
 	
-	@PostMapping("/create/comment/{artistId}")
-	public String createComment(@Valid @ModelAttribute("comment") Comment comment, BindingResult result, Model model, @PathVariable("artistId") Long artistId) {
+	@PostMapping("/create/comment/{bandId}")
+	public String createComment(@Valid @ModelAttribute("comment") Comment comment, BindingResult result, @PathVariable("bandId") Long bandId, Model model, HttpSession session) {
+		Band band = bands.oneBand(bandId);
 		Long userId = (Long) session.getAttribute("userId");
-		Artist artist = artists.findArtist(artistId);
-		User user = users.getUserById(userId);
+		User user = users.findById(userId);
+		comment.setBand(band);
 		comment.setUser(user);
-		comment.setArtist(artist);
-		if(userId == null) {
-			return "redirect:/";
-		}
 		if(result.hasErrors()) {
-			model.addAttribute("artist", artist);
-			return "viewArtist.jsp";
+			model.addAttribute("artist", band);
+			return "oneBand.jsp";
 		}
 		else {
-			comments.newComment(comment);
-			return "redirect:/view/artist/" + artistId;
+			comments.createComment(comment);
+			return "redirect:/view/band/" + bandId;
 		}
 	}
 	
-	@DeleteMapping("/delete/artist/{id}")
-	public String deleteArtist(@PathVariable("id") Long id) {
-		artists.deleteArtist(id);
-		return "redirect:/homepage";
+	@GetMapping("/edit/band/{id}")
+	public String editBand(@PathVariable("id") Long id, Model model) {
+		Band band = bands.oneBand(id);
+		System.out.println("Band genre: " + band.getGenre());
+		model.addAttribute("band", band);
+		return "editBand.jsp";
 	}
-	@GetMapping("/edit/artist/{id}")
-	public String editArtist(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("artist", artists.findArtist(id));
-		return "editArtist.jsp";
-	}
-	@PutMapping("/update/artist/{id}")
-	public String updateArtist(@Valid @ModelAttribute("artist") Artist artist, BindingResult result, Model model, @PathVariable("id") Long id) {
-		Long userId = (Long) session.getAttribute("userId");
-		if(userId == null) {
-			return "redirect:/";
-		}
+	@PutMapping("/update/band/{id}")
+	public String updateBand(@Valid @ModelAttribute("band") Band band, BindingResult result, Model model, @PathVariable("id") Long id, HttpSession session) {
 		if(result.hasErrors()) {
-			model.addAttribute("artist", artists.findArtist(id));
-			return "editArtist.jsp";
-		}else {
-			User user = users.getUserById(userId);
-			artist.setUser(user);
-			artists.updateArtist(artist);
-			return "redirect:/homepage";
+			model.addAttribute("band", bands.oneBand(id));
+			return "editBand.jsp";
+		} else { 
+			Long userId = (Long) session.getAttribute("userId");
+			User user = users.findById(userId);
+			band.setUser(user);
+			bands.updateBand(band);
+			return "redirect:/welcome";
 		}
 	}
+	@DeleteMapping("/delete/band/{id}")
+	public String deleteExpense(@PathVariable("id") Long id) {
+		bands.deleteBand(id);
+		return "redirect:/welcome";
+	}
+	
 }

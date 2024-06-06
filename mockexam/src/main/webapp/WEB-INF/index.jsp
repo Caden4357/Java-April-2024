@@ -13,46 +13,42 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
 </head>
-<body>
-	<div class="container border border-2 border-primary">
-		<h1 class="text-center">Welcome To Music Zone!</h1>
-		<form:form action="/register" method="post" modelAttribute="newUser">
+<body class="bg-dark text-white">
+	<div class="container">
+		<h1 class="text-center mb-5">Welcome To MusicZone!</h1>
+		<form:form action="/login" method="post" modelAttribute="newLogin"
+			class="w-100">
+			<h1 class="text-center">Login</h1>
 			<p>
-				<form:label path="username">Username</form:label>
-				<form:errors class="text-danger" path="username" />
-				<form:input class="w-100" path="username" />
-			</p>
-			<p>
-				<form:label path="email">Email</form:label>
 				<form:errors class="text-danger" path="email" />
-				<form:input class="w-100" path="email" />
+				<form:input class="form-control w-100" path="email" placeholder="Email..."/>
 			</p>
 			<p>
-				<form:label path="password">Password</form:label>
 				<form:errors class="text-danger" path="password" />
-				<form:input class="w-100" type="password" path="password" />
+				<form:input class="form-control w-100" type="password" path="password" placeholder="Password..."/>
 			</p>
-			<p>
-				<form:label path="confirm">Confirm Password</form:label>
-				<form:errors class="text-danger" path="confirm" />
-				<form:input class="w-100" type="password" path="confirm" />
-			</p>
-			<input type="submit" value="Submit" />
+			<input class="w-100 btn btn-secondary" type="submit" value="Submit" />
 		</form:form>
-		
-		<h2>Login</h2>
-		<form:form action="/login" method="post" modelAttribute="newLogin">
+		<form:form action="/register" method="post" modelAttribute="newUser"
+			class="mt-5">
+			<h1 class="text-center">Register</h1>
 			<p>
-				<form:label path="email">email</form:label>
+				<form:errors class="text-danger" path="username" />
+				<form:input class="form-control w-100" path="username" placeholder="Username..."/>
+			</p>
+			<p>
 				<form:errors class="text-danger" path="email" />
-				<form:input class="w-100" path="email" />
+				<form:input class="form-control w-100" path="email" placeholder="Email..."/>
 			</p>
 			<p>
-				<form:label path="password">Password</form:label>
 				<form:errors class="text-danger" path="password" />
-				<form:input class="w-100" type="password" path="password" />
+				<form:input class="form-control w-100" type="password" path="password" placeholder="Password..."/>
 			</p>
-			<input type="submit" value="Submit" />
+			<p>
+				<form:errors class="text-danger" path="confirm" />
+				<form:input class="form-control w-100" type="password" path="confirm" placeholder="Confirm Password..."/>
+			</p>
+			<input class="w-100 btn btn-secondary" type="submit" value="Submit" />
 		</form:form>
 	</div>
 </body>

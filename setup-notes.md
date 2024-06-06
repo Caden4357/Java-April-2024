@@ -41,6 +41,13 @@
 		<artifactId>jbcrypt</artifactId>
         <version>0.4</version>
 	</dependency>
+
+    <!-- For Image Uploading or anything that requires custom configuration -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-configuration-processor</artifactId>
+        <optional>true</optional>
+    </dependency>
 ```
 
 # application.properties:
@@ -51,6 +58,10 @@ spring.datasource.username=<<dbuser>>
 spring.datasource.password=<<dbpassword>>
 spring.jpa.hibernate.ddl-auto=update
 spring.mvc.hiddenmethod.filter.enabled=true
+
+# For Image Uploading
+spring.servlet.multipart.max-file-size=2000KB 
+spring.servlet.multipart.max-request-size=2000KB
 ```
 
 # jstl tag for c tags:

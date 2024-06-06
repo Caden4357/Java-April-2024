@@ -1,5 +1,4 @@
 package com.codingdojo.mockexam.models;
-
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,8 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "comments")
@@ -25,11 +22,9 @@ public class Comment{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotEmpty(message = "comment is required!")
-	@Size(min = 3, message = "comment must be at least 3 characters")
+// 	Add additional attributes dont forget constructors and getters and setters also as well as any relationships you might need
 	private String body;
 	
-	// generate constructors + getters and setters
 	@Column(updatable=false)
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createdAt;
@@ -45,19 +40,20 @@ public class Comment{
 		this.updatedAt = new Date();
 	}
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name="user_id")
     private User user;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
+    @JoinColumn(name="band_id")
+    private Band band;
 
 	public Comment() {
 	}
-	public Comment(String body, User user, Artist artist) {
+	public Comment(String body, User user, Band band) {
+		super();
 		this.body = body;
 		this.user = user;
-		this.artist = artist;
+		this.band = band;
 	}
 	public Long getId() {
 		return id;
@@ -89,15 +85,11 @@ public class Comment{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public Artist getArtist() {
-		return artist;
+	public Band getBand() {
+		return band;
 	}
-	public void setArtist(Artist artist) {
-		this.artist = artist;
+	public void setBand(Band band) {
+		this.band = band;
 	}
-	
-	
-	
-	
     
 }

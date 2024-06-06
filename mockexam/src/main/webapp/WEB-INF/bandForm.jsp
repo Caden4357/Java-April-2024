@@ -15,39 +15,32 @@
 </head>
 <body>
 	<div class="container border border-2 border-primary">
-		<a href="/logout">logout</a>
-		<a href="/homepage">Home</a> 
-		<h1>Add Your Favorite Artist</h1>
-		<form:form action="/create/artist" method="post"
-			modelAttribute="artist" class="mx-auto w-50">
+		<a href="/welcome">Dashboard</a> <a href="/logout">Logout</a>
+		<form:form action="/create/band" method="post"
+			modelAttribute="band">
 			<p>
 				<form:label path="name">Name</form:label>
 				<form:errors class="text-danger" path="name" />
-				<form:input class="w-100" path="name" />
+				<form:input path="name" />
 			</p>
 			<p>
 				<form:label path="numOfAlbums">Number Of Albums</form:label>
 				<form:errors class="text-danger" path="numOfAlbums" />
-				<form:input type="number" class="w-100" path="numOfAlbums" />
+				<form:input path="numOfAlbums" />
 			</p>
 			<p>
-				<form:label path="genre">Genre</form:label>
-				<form:errors class="text-danger" path="genre" />
+
 				<form:select path="genre">
-					<form:option value="Pop">Pop</form:option>
-					<form:option value="Rock">Rock</form:option>
-					<form:option value="Country">Country</form:option>
-					<form:option value="Hip-Hop/Rap">Hip-Hop/Rap</form:option>
-					<form:option value="Classical">Classical</form:option>
-					<form:option value="R&B">R&B</form:option>
-					<form:option value="Jazz">Jazz</form:option>
-					<form:option value="Metal">Metal</form:option>
+					<option value="Pop">Pop</option>
+					<option value="Rock">Rock</option>
+					<option value="Punk">Punk</option>
+					<option value="Country">Country</option>
+					<option value="Hip-Hop/Rap">Hip-Hop/Rap</option>
+					<option value="R&B">R&B</option>
 				</form:select>
 			</p>
 			<p>
-				<form:label path="stillTouring">Still Touring?</form:label>
-				<form:errors class="text-danger" path="stillTouring" />
-				<form:checkbox path="stillTouring" />
+				<form:input type="hidden" path="user" value="${userId}" />
 			</p>
 			<input type="submit" value="Submit" />
 		</form:form>
