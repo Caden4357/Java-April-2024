@@ -6,10 +6,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.codingdojo.flashfeed.models.Comment;
 import com.codingdojo.flashfeed.models.LoginUser;
+import com.codingdojo.flashfeed.models.Post;
 import com.codingdojo.flashfeed.models.User;
+import com.codingdojo.flashfeed.services.CommentService;
+import com.codingdojo.flashfeed.services.PostService;
+import com.codingdojo.flashfeed.services.UploadService;
 import com.codingdojo.flashfeed.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -20,7 +28,12 @@ public class HomeController {
 	
 	@Autowired
 	UserService users;
-	
+	@Autowired
+	UploadService images;
+	@Autowired
+	PostService posts;
+	@Autowired
+	CommentService comments;
 	
 	@GetMapping("/")
 	public String index(Model model) {
@@ -64,8 +77,39 @@ public class HomeController {
 		}
 		User user = users.getUserById(userId);
 		model.addAttribute("user", user);
+		model.addAttribute("posts", posts.allPost());
 		return "dashboard.jsp";
 	}
+	
+	@PostMapping("/upload")
+	public String uploadPhoto(@RequestParam("image") MultipartFile image, @RequestParam("title") String title, HttpSession session) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		images.store(image);
+		System.out.println("/uploads/" + image.getOriginalFilename());
+		Post newPost = new Post(title, "/uploads/" + image.getOriginalFilename());
+		newPost.setUser(users.getUserById(userId));
+		posts.createPost(newPost);
+//		create a new post with the image, user and a title
+		return "redirect:/dashboard";
+	}
+	
+	@PostMapping("/comment/post/{postId}")
+	public String commentOnPost( @PathVariable("postId") Long postId, @RequestParam("body") String body, HttpSession session) {
+		Long userId = (Long) session.getAttribute("userId");
+		if(userId == null) {
+			return "redirect:/";
+		}
+		Post post = posts.onePost(postId);
+		User user = users.getUserById(userId);
+		Comment newComment = new Comment(body, user, post);
+		comments.createComment(newComment);
+		return "redirect:/dashboard";
+	}
+	
+	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();

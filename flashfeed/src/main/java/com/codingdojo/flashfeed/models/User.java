@@ -1,14 +1,17 @@
 package com.codingdojo.flashfeed.models;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -55,6 +58,10 @@ public class User{
 	protected void onUpdate(){
 		this.updatedAt = new Date();
 	}
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Post> posts;
+	
+	
 	public User() {
 	}
 	public User(String username, String email, String password, String confirm) {
@@ -62,6 +69,13 @@ public class User{
 		this.email = email;
 		this.password = password;
 		this.confirm = confirm;
+	}
+	
+	public List<Post> getPosts() {
+		return posts;
+	}
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 	public Long getId() {
 		return id;

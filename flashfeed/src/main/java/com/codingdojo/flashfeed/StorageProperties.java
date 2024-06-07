@@ -1,4 +1,4 @@
-package com.codingdojo.fileupload;
+package com.codingdojo.flashfeed;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
