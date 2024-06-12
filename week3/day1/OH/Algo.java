@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class Algo {
     
     public String test() {
@@ -46,11 +48,37 @@ public class Algo {
 
 
     // https://www.hackerrank.com/challenges/birthday-cake-candles/problem?isFullScreen=true
+    // You are in charge of the cake for a child's birthday. You have decided the cake will have one candle for each year of their total age. They will only be able to blow out the tallest of the candles. Count how many candles are tallest.
+    // candles = [4,4,1,3,5,8,9] return --> 1 because there are 2 4s and thats the largest number 
+    // we need to find the highest number (compare every number)
+    // count for how many highest number in the array 
+    // return the count 
+    public int birthdayCakeCandles(int[] ar){
+        int count = 1;
+        int maxNum = ar[0];
+        for(int i = 1; i < ar.length; i++){
+            if(ar[i] > maxNum){
+                maxNum = ar[i];
+                count = 1;
+                System.out.println("Count: " + count);
+                System.out.println("Max Num : " + maxNum);
+
+            }else if(ar[i] == maxNum){
+                count++;
+                System.out.println("Count: " + count);
+                System.out.println("Max Num : " + maxNum);
+            }
+        }
+        return count;
+    }
+    // Frequency Counter
+
+
+    
+    // Same Frequency
 
 
 
 
-
-    // reverse integer array working in place givin [1,2,3,4,5] you should return [5,4,3,2,1] Without creating a new array
-
+    // Reverse integer array working in place givin [1,2,3,4,5] you should return [5,4,3,2,1] Without creating a new array
 }
